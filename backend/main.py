@@ -32,6 +32,10 @@ def get_tasks():
     session = SessionLocal()
     tasks = session.query(Task).all()
     session.close()
+
+    if not tasks:
+        raise HTTPException(status_code=404, detail="No tasks available")
+
     return tasks
 
 @app.post("/tasks")
