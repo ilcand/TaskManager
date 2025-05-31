@@ -21,11 +21,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-class TaskSchema(BaseModel):
+class TaskCreateSchema(BaseModel):
     title: str
     description: str = ""
     status: bool = False
+
+# Task output to client (with ID)
+class TaskSchema(TaskCreateSchema):
+    id: int
+    class Config:
+        orm_mode = True
 
 @app.get("/tasks", response_model=List[TaskSchema])
 def get_tasks():
@@ -39,7 +44,7 @@ def get_tasks():
     return tasks
 
 @app.post("/tasks")
-def create_task(task: TaskSchema):
+def create_task(task: TaskCreateSchema):
     session = SessionLocal()
     db_task = Task(**task.dict())
     session.add(db_task)
