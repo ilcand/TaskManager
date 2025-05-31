@@ -24,6 +24,9 @@ def seed_data():
     ]
     session.add_all(tasks)
     session.commit()
+    for task in tasks:
+        print(f"Task '{task.title}' inserted with ID: {task.id}")
+    
     session.close()
     print("Seeded DB with dummy tasks.")
 
